@@ -24,8 +24,16 @@ public class SecurityConfig {
 
         http
                 .csrf(csrf -> csrf.disable())
+
+                // ✅ ENABLE CORS HERE (actual rules are in CorsConfig)
+                .cors(cors -> {})
+
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
                 .authorizeHttpRequests(auth -> auth
+
+                        // ✅ Allow CORS PREFLIGHT REQUESTS
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
                         // ✅ Allow homepage
                         .requestMatchers(HttpMethod.GET, "/").permitAll()
@@ -38,14 +46,14 @@ public class SecurityConfig {
                                 "/api/students/login"
                         ).permitAll()
 
-                        // Allow file access
+                        // Allow static uploads
                         .requestMatchers("/uploads/**").permitAll()
 
                         // Everything else requires JWT
                         .anyRequest().authenticated()
                 );
 
-        // Keep original logic
+        // Keep original logic — don't change
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
