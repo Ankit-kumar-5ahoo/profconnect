@@ -24,25 +24,28 @@ public class SecurityConfig {
 
         http
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> {})
+
+                // ❗IMPORTANT: Disable Spring's internal CORS and use your custom CorsFilter
+                .cors(cors -> cors.disable())
+
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests(auth -> auth
 
-                        // ✅ Allow homepage & static files on Render
+                        // Allow homepage & static files
                         .requestMatchers(
                                 "/", "/index.html", "/favicon.ico",
                                 "/css/**", "/js/**", "/images/**",
                                 "/static/**", "/webjars/**"
                         ).permitAll()
 
-                        // ✅ Allow Error Page (Fixes Render 403)
+                        // Allow Render's built-in error page
                         .requestMatchers("/error").permitAll()
 
-                        // ✅ Allow CORS preflight requests
+                        // Allow CORS preflight
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                        // ✅ Public APIs
+                        // Public APIs
                         .requestMatchers(
                                 "/api/professors/register",
                                 "/api/professors/login",
@@ -50,14 +53,14 @@ public class SecurityConfig {
                                 "/api/students/login"
                         ).permitAll()
 
-                        // ✅ Allow uploaded resumes / PDFs
+                        // Allow uploaded PDFs/resumes
                         .requestMatchers("/uploads/**").permitAll()
 
-                        // 🔒 Everything else requires JWT
+                        // Everything else is secured
                         .anyRequest().authenticated()
                 );
 
-        // Keep your existing JWT filter
+        // Keep JWT filter
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
