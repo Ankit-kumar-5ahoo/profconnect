@@ -1,5 +1,6 @@
 package com.profconnect.profconnect.config;
 
+import org.springframework.http.HttpMethod;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +26,10 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+
+                        // ✅ Allow homepage
+                        .requestMatchers(HttpMethod.GET, "/").permitAll()
+
                         // Public endpoints
                         .requestMatchers(
                                 "/api/professors/register",
@@ -33,13 +38,14 @@ public class SecurityConfig {
                                 "/api/students/login"
                         ).permitAll()
 
+                        // Allow file access
                         .requestMatchers("/uploads/**").permitAll()
 
-                        // Every other endpoint requires JWT
+                        // Everything else requires JWT
                         .anyRequest().authenticated()
                 );
 
-        // IMPORTANT: ADD JWT FILTER
+        // Keep original logic
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
