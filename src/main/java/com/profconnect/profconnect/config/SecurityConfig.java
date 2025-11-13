@@ -24,21 +24,26 @@ public class SecurityConfig {
 
         http
                 .csrf(csrf -> csrf.disable())
-
-                // Enable CORS (actual origins defined in CorsConfig)
                 .cors(cors -> {})
-
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
                 .authorizeHttpRequests(auth -> auth
 
-                        // Allow CORS preflight
+                        // Allow static homepage
+                        .requestMatchers("/", "/index.html", "/favicon.ico").permitAll()
+
+                        // Allow all built-in static resource paths
+                        .requestMatchers(
+                                "/css/**",
+                                "/js/**",
+                                "/images/**",
+                                "/static/**",
+                                "/webjars/**"
+                        ).permitAll()
+
+                        // Allow preflight requests
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                        // Allow homepage and static root files
-                        .requestMatchers(HttpMethod.GET, "/", "/index.html", "/favicon.ico").permitAll()
-
-                        // Public authentication APIs
+                        // Public APIs
                         .requestMatchers(
                                 "/api/professors/register",
                                 "/api/professors/login",
@@ -46,14 +51,13 @@ public class SecurityConfig {
                                 "/api/students/login"
                         ).permitAll()
 
-                        // Allow uploaded files
+                        // Allow file access
                         .requestMatchers("/uploads/**").permitAll()
 
-                        // Everything else requires JWT
+                        // Everything else secured
                         .anyRequest().authenticated()
                 );
 
-        // Add JWT filter BEFORE username-password filter
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
