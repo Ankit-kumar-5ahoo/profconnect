@@ -26,24 +26,23 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> {})
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
                 .authorizeHttpRequests(auth -> auth
 
-                        // Allow static homepage
-                        .requestMatchers("/", "/index.html", "/favicon.ico").permitAll()
-
-                        // Allow all built-in static resource paths
+                        // ✅ Allow homepage & static files on Render
                         .requestMatchers(
-                                "/css/**",
-                                "/js/**",
-                                "/images/**",
-                                "/static/**",
-                                "/webjars/**"
+                                "/", "/index.html", "/favicon.ico",
+                                "/css/**", "/js/**", "/images/**",
+                                "/static/**", "/webjars/**"
                         ).permitAll()
 
-                        // Allow preflight requests
+                        // ✅ Allow Error Page (Fixes Render 403)
+                        .requestMatchers("/error").permitAll()
+
+                        // ✅ Allow CORS preflight requests
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                        // Public APIs
+                        // ✅ Public APIs
                         .requestMatchers(
                                 "/api/professors/register",
                                 "/api/professors/login",
@@ -51,13 +50,14 @@ public class SecurityConfig {
                                 "/api/students/login"
                         ).permitAll()
 
-                        // Allow file access
+                        // ✅ Allow uploaded resumes / PDFs
                         .requestMatchers("/uploads/**").permitAll()
 
-                        // Everything else secured
+                        // 🔒 Everything else requires JWT
                         .anyRequest().authenticated()
                 );
 
+        // Keep your existing JWT filter
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

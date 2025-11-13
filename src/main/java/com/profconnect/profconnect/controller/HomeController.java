@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class HomeController {
 
-    @GetMapping("/")
+    @GetMapping(value = "/", produces = "text/plain")
     public String home() {
         return " ProfConnect API is live!";
     }
