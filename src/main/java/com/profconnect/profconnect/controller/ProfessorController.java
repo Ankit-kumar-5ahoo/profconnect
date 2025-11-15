@@ -16,37 +16,37 @@ public class ProfessorController {
 
     private final ProfessorService professorService;
 
-    // ✅ Create Professor
+    // Creating Professor
     @PostMapping("/register")
     public ResponseEntity<Professor> registerProfessor(@RequestBody Professor professor) {
         Professor saved = professorService.registerProfessor(professor);
         return ResponseEntity.ok(saved);
     }
-    // ✅ NEW: Login API
+    // Login
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         return ResponseEntity.ok(professorService.login(request));
     }
 
-    // ✅ Get all professors
+    // Get all professors
     @GetMapping
     public ResponseEntity<List<Professor>> getAllProfessors() {
         return ResponseEntity.ok(professorService.getAllProfessors());
     }
 
-    // ✅ Get by ID
+    // Get by ID
     @GetMapping("/{id}")
     public ResponseEntity<Professor> getProfessorById(@PathVariable Long id) {
         return ResponseEntity.ok(professorService.getProfessorById(id));
     }
 
-    // ✅ Update
+    // Update
     @PutMapping("/{id}")
     public ResponseEntity<Professor> updateProfessor(@PathVariable Long id, @RequestBody Professor updated) {
         return ResponseEntity.ok(professorService.updateProfessor(id, updated));
     }
 
-    // ✅ Delete
+    // Delete
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProfessor(@PathVariable Long id) {
         professorService.deleteProfessor(id);

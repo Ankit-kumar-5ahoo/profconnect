@@ -23,12 +23,12 @@ public class JwtService {
         return Keys.hmacShaKeyFor(secret.getBytes());
     }
 
-    // ✅ Extract username (email) from token
+
     public String extractUsername(String token) {
         return extractAllClaims(token).getSubject();
     }
 
-    // ✅ Extract all claims
+
     public Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(getKey())
@@ -37,7 +37,7 @@ public class JwtService {
                 .getBody();
     }
 
-    // ✅ Validate token
+
     public boolean isTokenValid(String token) {
         try {
             extractAllClaims(token);  // if parsing fails = invalid token
@@ -47,7 +47,7 @@ public class JwtService {
         }
     }
 
-    // ✅ Generate JWT
+
     public String generateToken(String email) {
         return Jwts.builder()
                 .setSubject(email)

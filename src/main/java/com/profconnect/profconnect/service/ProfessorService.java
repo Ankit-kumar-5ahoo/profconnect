@@ -19,19 +19,19 @@ public class ProfessorService {
     private final JwtService jwtService;
 
 
-    // 🔹 Register new professor with hashed password
+
     public Professor registerProfessor(Professor professor) {
         if (professorRepository.findByEmail(professor.getEmail()).isPresent()) {
             throw new RuntimeException("Email already registered");
         }
 
-        // ✅ Hash password before saving
+
         professor.setPassword(passwordEncoder.encode(professor.getPassword()));
 
         return professorRepository.save(professor);
     }
 
-    // 🔹 Validate login credentials (used by AuthController)
+
     public Professor loginProfessor(String email, String rawPassword) {
         Professor professor = professorRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Invalid email or password"));
@@ -59,7 +59,7 @@ public class ProfessorService {
         prof.setSpecialization(updated.getSpecialization());
         prof.setBio(updated.getBio());
 
-        // ✅ If password is provided, hash new one
+
         if (updated.getPassword() != null && !updated.getPassword().isBlank()) {
             prof.setPassword(passwordEncoder.encode(updated.getPassword()));
         }
@@ -70,6 +70,7 @@ public class ProfessorService {
     public void deleteProfessor(Long id) {
         professorRepository.deleteById(id);
     }
+
     public String login(LoginRequest request) {
         Professor professor = professorRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("Invalid email or password"));
@@ -78,7 +79,7 @@ public class ProfessorService {
             throw new RuntimeException("Invalid email or password");
         }
 
-        return jwtService.generateToken(professor.getEmail());   // ✅ USE ONLY EMAIL
+        return jwtService.generateToken(professor.getEmail());
     }
     public Professor getByEmail(String email) {
         return professorRepository.findByEmail(email)

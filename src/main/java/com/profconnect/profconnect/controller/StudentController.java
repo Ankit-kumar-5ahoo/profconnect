@@ -16,7 +16,7 @@ import java.util.List;
 public class StudentController {
 
     private final StudentService studentService;
-    private final JwtService jwtService;  // ✅ ADDED: inject JWT service
+    private final JwtService jwtService;
 
     @PostMapping("/register")
     public ResponseEntity<Student> registerStudent(@RequestBody Student student) {
@@ -26,7 +26,7 @@ public class StudentController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Student student) {
 
-        // ✔ Your exact logic
+
         Student loggedIn = studentService.loginStudent(student.getEmail(), student.getPassword());
         String token = jwtService.generateToken(loggedIn.getEmail());
 

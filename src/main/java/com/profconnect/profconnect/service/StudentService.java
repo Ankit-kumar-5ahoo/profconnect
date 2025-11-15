@@ -15,7 +15,7 @@ public class StudentService {
     private final StudentRepository studentRepository;
     private final PasswordEncoder passwordEncoder;
 
-    // ✔ Register student (existing logic unchanged)
+
     public Student registerStudent(Student student) {
 
         if (studentRepository.findByEmail(student.getEmail()).isPresent()) {
@@ -27,7 +27,7 @@ public class StudentService {
         return studentRepository.save(student);
     }
 
-    // 🔥 ✔ ADDED: Login method (required by StudentController)
+
     public Student loginStudent(String email, String rawPassword) {
 
         Student student = studentRepository.findByEmail(email)
@@ -40,7 +40,7 @@ public class StudentService {
         return student;
     }
 
-    // ✔ These methods untouched
+
     public List<Student> getAllStudents() {
         return studentRepository.findAll();
     }
@@ -54,8 +54,7 @@ public class StudentService {
         Student s = getStudentById(id);
 
         s.setName(updated.getName());
-        // NOTE: Uncomment only if fields exist
-        // s.setEmail(updated.getEmail());
+
 
         return studentRepository.save(s);
     }

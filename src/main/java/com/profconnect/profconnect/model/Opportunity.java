@@ -21,14 +21,14 @@ public class Opportunity {
 
     private String description;
 
-    private String fieldOfStudy;   // 🔹 Added
-    private String type;           // 🔹 Added
-    private String duration;       // 🔹 Added
-    private String prerequisites;  // 🔹 Added
-    private String pdfUrl;         // 🔹 Added
+    private String fieldOfStudy;
+    private String type;
+    private String duration;
+    private String prerequisites;
+    private String pdfUrl;
 
     @ManyToOne
     @JoinColumn(name = "professor_id")
     @JsonBackReference
-    private Professor professor;   // 🔹 Relationship back to Professor
+    private Professor professor;
 }

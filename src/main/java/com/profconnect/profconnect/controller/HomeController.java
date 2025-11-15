@@ -8,6 +8,6 @@ public class HomeController {
 
     @GetMapping(value = "/", produces = "text/plain")
     public String home() {
-        return " ProfConnect API is live!";
+        return " ProfConnect Backend is working fine!";
     }
 }
