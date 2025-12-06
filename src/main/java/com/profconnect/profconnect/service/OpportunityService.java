@@ -1,12 +1,10 @@
 package com.profconnect.profconnect.service;
-
-
 import com.profconnect.profconnect.model.Opportunity;
+import com.profconnect.profconnect.model.User;
 import com.profconnect.profconnect.repository.OpportunityRepository;
 import com.profconnect.profconnect.repository.ProfessorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -17,12 +15,29 @@ public class OpportunityService {
     private final ProfessorRepository professorRepository;
 
 
-
     public Opportunity createOpportunity(Opportunity opportunity, Long professorId) {
         var professor = professorRepository.findById(professorId)
                 .orElseThrow(() -> new RuntimeException("Professor not found"));
-     opportunity.setProfessor(professor); // TODO
+        opportunity.setProfessor(professor);
         return opportunityRepository.save(opportunity);
+    }
+
+
+    public Opportunity createOpportunity(Opportunity opportunity, User user) {
+
+        switch (user.getRole()) {
+
+            case "PROFESSOR" -> {
+                opportunity.setProfessor((Professor) user);
+                return opportunityRepository.save(opportunity);
+            }
+
+            case "STUDENT" -> {
+                throw new RuntimeException("Students cannot create opportunities");
+            }
+
+            default -> throw new RuntimeException("Unknown role");
+        }
     }
 
     public List<Opportunity> getAllOpportunities() {
@@ -54,4 +69,3 @@ public class OpportunityService {
         return opportunityRepository.findByProfessorId(profId);
     }
 }
-

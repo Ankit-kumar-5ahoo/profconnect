@@ -11,9 +11,9 @@ import java.util.Map;
 @Component
 public class JwtUtil {
 
-    // Generate a long, random secret and move to env in production
+
     private static final String SECRET = "change_this_super_long_random_secret_key_at_least_64_chars_________";
-    private static final long EXP_MS = 1000L * 60 * 60 * 12; // 12h
+    private static final long EXP_MS = 1000L * 60 * 60 * 12;
 
     private final Key key = Keys.hmacShaKeyFor(SECRET.getBytes());
 

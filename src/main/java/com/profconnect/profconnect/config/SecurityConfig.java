@@ -1,5 +1,6 @@
 package com.profconnect.profconnect.config;
 
+import org.springframework.http.HttpMethod;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,23 +24,44 @@ public class SecurityConfig {
 
         http
                 .csrf(csrf -> csrf.disable())
+
+
+                .cors(cors -> cors.disable())
+
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
                 .authorizeHttpRequests(auth -> auth
-                        // Public endpoints
+
+
+                        .requestMatchers(
+                                "/", "/index.html", "/favicon.ico",
+                                "/css/**", "/js/**", "/images/**",
+                                "/static/**", "/webjars/**"
+                        ).permitAll()
+
+
+                        .requestMatchers("/error").permitAll()
+
+
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
+
                         .requestMatchers(
                                 "/api/professors/register",
                                 "/api/professors/login",
                                 "/api/students/register",
-                                "/api/students/login"
+                                "/api/students/login",
+                                "/api/auth/logout"
                         ).permitAll()
+
 
                         .requestMatchers("/uploads/**").permitAll()
 
-                        // Every other endpoint requires JWT
+
                         .anyRequest().authenticated()
                 );
 
-        // IMPORTANT: ADD JWT FILTER
+
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

@@ -20,7 +20,7 @@ public class OpportunityController {
 
     private final OpportunityService opportunityService;
 
-    // ✅ Create Opportunity (with professorId support)
+
     @PostMapping(
             value = "/create",
             consumes = { "multipart/form-data" }
@@ -46,7 +46,7 @@ public class OpportunityController {
             opportunity.setPdfUrl("/uploads/" + filename);
         }
 
-        // ✅ Extract professorId from nested professor object
+
         Long professorId = null;
         if (opportunity.getProfessor() != null) {
             professorId = opportunity.getProfessor().getId();
@@ -60,19 +60,19 @@ public class OpportunityController {
         return ResponseEntity.ok(saved);
     }
 
-    // ✅ Get all opportunities
+
     @GetMapping
     public ResponseEntity<List<Opportunity>> getAllOpportunities() {
         return ResponseEntity.ok(opportunityService.getAllOpportunities());
     }
 
-    // ✅ Get by ID
+
     @GetMapping("/{id}")
     public ResponseEntity<Opportunity> getOpportunityById(@PathVariable Long id) {
         return ResponseEntity.ok(opportunityService.getOpportunityById(id));
     }
 
-    // ✅ Update
+
     @PutMapping(
             value = "/update/{id}",
             consumes = { "multipart/form-data" }
@@ -86,7 +86,7 @@ public class OpportunityController {
         ObjectMapper mapper = new ObjectMapper();
         Opportunity updated = mapper.readValue(data, Opportunity.class);
 
-        // Handle PDF upload if present
+
         if (file != null && !file.isEmpty()) {
             if (file.getSize() > 10 * 1024 * 1024) { // limit 10MB
                 return ResponseEntity.badRequest().build();
@@ -105,14 +105,14 @@ public class OpportunityController {
         return ResponseEntity.ok(saved);
     }
 
-    // ✅ Delete
+    // Delete oopurtunity
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteOpportunity(@PathVariable Long id) {
         opportunityService.deleteOpportunity(id);
         return ResponseEntity.noContent().build();
     }
 
-    // ✅ Get Opportunities by Professor ID
+    // Get Opportunities by Professor ID
     @GetMapping("/byProfessor/{profId}")
     public ResponseEntity<List<Opportunity>> getOpportunitiesByProfessor(@PathVariable Long profId) {
         return ResponseEntity.ok(opportunityService.getOpportunitiesByProfessor(profId));

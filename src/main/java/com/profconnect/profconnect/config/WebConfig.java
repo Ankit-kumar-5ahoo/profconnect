@@ -10,7 +10,7 @@ public class WebConfig {
 
     @Bean
     public MultipartResolver multipartResolver() {
-        System.out.println("✅ StandardServletMultipartResolver active");
+        System.out.println("StandardServletMultipartResolver active");
         return new StandardServletMultipartResolver();
     }
 }

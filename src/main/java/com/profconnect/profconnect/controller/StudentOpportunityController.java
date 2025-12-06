@@ -15,13 +15,13 @@ public class StudentOpportunityController {
 
     private final OpportunityService opportunityService;
 
-    // ✅ Students can view all opportunities (NO AUTH REQUIRED)
+
     @GetMapping
     public ResponseEntity<List<Opportunity>> getAllOpportunities() {
         return ResponseEntity.ok(opportunityService.getAllOpportunities());
     }
 
-    // ✅ Student can view one opportunity by ID (NO AUTH REQUIRED)
+
     @GetMapping("/{id}")
     public ResponseEntity<Opportunity> getOpportunityById(@PathVariable Long id) {
         return ResponseEntity.ok(opportunityService.getOpportunityById(id));

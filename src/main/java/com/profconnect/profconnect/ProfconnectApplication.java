@@ -9,8 +9,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 @SpringBootApplication
-@EntityScan(basePackages = "com.profconnect.profconnect.model") // Replace with your entity package
-@EnableJpaRepositories(basePackages = "com.profconnect.profconnect.repository") // Replace with your repository package
+@EntityScan(basePackages = "com.profconnect.profconnect.model")
+@EnableJpaRepositories(basePackages = "com.profconnect.profconnect.repository")
 public class ProfconnectApplication {
 
 	public static void main(String[] args) {

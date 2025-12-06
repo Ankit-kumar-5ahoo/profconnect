@@ -11,21 +11,17 @@ import lombok.*;
 @Table(
         name = "student",
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = "email")  // ensures uniqueness in DB
+                @UniqueConstraint(columnNames = "email")
         }
 )
-public class Student {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private String name;
-
-    @Column(nullable = false, unique = true)
-    private String email;
+public class Student extends User {
 
     private String department;
     private String year;
-    private String password;
+
+    @Override
+    public String getRole() {
+        return "STUDENT";
+    }
+
 }
